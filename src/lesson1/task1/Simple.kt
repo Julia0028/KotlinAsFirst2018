@@ -81,8 +81,8 @@ fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
     val x2=x1*0.000277778
     val x3=x2+grad
     val x4 = x3*PI/180
-    val x5 = Math.round(x4*100000.0)/100000.0
-    return x5
+    // val x5 = Math.round(x4*100000.0)/100000.0
+    return x4
 
 }
 

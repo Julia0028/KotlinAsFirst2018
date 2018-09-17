@@ -146,6 +146,7 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
  */
 fun numberRevert(number: Int): Int = (number-(number/10)*10)*100+(number/10-number/100*10)*10+number/100
 
+// 123
 fun main(args: Array<String>) {
     val result1 = seconds(42, 23, 17)
     println("seconds: $result1")

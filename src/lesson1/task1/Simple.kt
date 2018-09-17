@@ -55,7 +55,7 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
  * Пользователь задает время в часах, минутах и секундах, например, 8:20:35.
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
-fun seconds(hours: Int, minutes: Int, seconds: Int): Int = (hours*3600+minutes*60+seconds)
+fun seconds(hours: Int, minutes: Int, seconds: Int): Int = hours*3600+minutes*60+seconds
 
 /**
  * Тривиальная
@@ -65,9 +65,9 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = (hours*3600+minutes*6
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
-    val x1 = sagenes*48+arshins*16+vershoks
-    val x2 = x1*4.445/100
-    return x2
+    val length = sagenes*48+arshins*16+vershoks
+    val result = length*4.445/100
+    return result
 }
 
 /**
@@ -77,12 +77,11 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
-    val x1= min*60+sec
-    val x2=x1*0.000277778
-    val x3=x2+grad
-    val x4 = x3*PI/180
-    val x5 = Math.round(x4*100000.0)/100000.0
-    return x5
+    val sec= min*60+sec
+    val gr=sec*0.000277778
+    val x3=gr+grad
+    val result = x3*PI/180
+    return result
 }
 
 /**
@@ -92,10 +91,10 @@ fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
  * Например, расстояние между (3, 0) и (0, 4) равно 5
  */
 fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double {
-    val a = x2-x1
-    val b = y2-y1
-    val r = sqr(a)+sqr(b)
-    val result = sqrt(r)
+    val lengthX = x2-x1
+    val lengthY = y2-y1
+    val length = sqr(lengthX)+sqr(lengthY)
+    val result = sqrt(length)
     return result
 }
 
@@ -105,7 +104,11 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double {
  * Пользователь задает целое число, большее 100 (например, 3801).
  * Определить третью цифру справа в этом числе (в данном случае 8).
  */
-fun thirdDigit(number: Int): Int = number/100-(number/1000)*10
+fun thirdDigit(number: Int): Int {
+    val num = number/100
+    val result = num%10
+    return result
+}
 
 
 /**
@@ -116,9 +119,9 @@ fun thirdDigit(number: Int): Int = number/100-(number/1000)*10
  * Определите время поезда в пути в минутах (в данном случае 216).
  */
 fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
-    val a = hoursDepart*60+minutesDepart
-    val b =hoursArrive*60+minutesArrive
-    val result = abs(a-b)
+    val depart = hoursDepart*60+minutesDepart
+    val arrive =hoursArrive*60+minutesArrive
+    val result = abs(depart-arrive)
     return result
 }
 
@@ -130,10 +133,10 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
-    val a=percent+100
-    val b=initial
-    val c=a*0.01
-    val result= b*c*c*c
+    val pr=percent+100
+    val rub=initial
+    val kof=pr*0.01
+    val result= rub*kof*kof*kof
     return result
 }
 
@@ -156,7 +159,7 @@ fun main(args: Array<String>) {
     println("trackLength: $result4")
     val result5 = thirdDigit(102)
     println("thirdDigit: $result5")
-    val result6 = travelMinutes(23, 14, 12, 0)
+    val result6 = travelMinutes(12, 0, 23, 15)
     println("travelMinutes: $result6")
     val result7 = accountInThreeYears(483647, 8)
     println("accountInThreeYears: $result7")

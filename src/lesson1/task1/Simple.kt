@@ -77,10 +77,8 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
-    val sec= min*60+sec
-    val gr=sec*0.000277778
-    val x3=gr+grad
-    val result = x3*PI/180
+    val deg = sec / 3600.0 + min / 60.0 + grad
+    val result = deg*PI/180
     return result
 }
 
@@ -121,7 +119,7 @@ fun thirdDigit(number: Int): Int {
 fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
     val depart = hoursDepart*60+minutesDepart
     val arrive =hoursArrive*60+minutesArrive
-    val result = abs(depart-arrive)
+    val result = arrive - depart
     return result
 }
 
@@ -133,10 +131,8 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
-    val pr=percent+100
-    val rub=initial
-    val kof=pr*0.01
-    val result= rub*kof*kof*kof
+    val index=(percent+100)*0.01
+    val result= initial*index*index*index
     return result
 }
 
@@ -146,7 +142,10 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
  * Пользователь задает целое трехзначное число (например, 478).
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
-fun numberRevert(number: Int): Int = (number-(number/10)*10)*100+(number/10-number/100*10)*10+number/100
+fun numberRevert(number: Int): Int { //(number-(number/10)*10)*100+(number/10-number/100*10)*10+number/100
+    val result = number % 10 * 100 + number / 10 % 10 * 10 + number / 100
+    return result
+}
 
 fun main(args: Array<String>) {
     val result1 = seconds(42, 23, 17)
@@ -161,7 +160,7 @@ fun main(args: Array<String>) {
     println("thirdDigit: $result5")
     val result6 = travelMinutes(12, 0, 23, 15)
     println("travelMinutes: $result6")
-    val result7 = accountInThreeYears(483647, 8)
+    val result7 = accountInThreeYears(115, 5)
     println("accountInThreeYears: $result7")
     val result8 = numberRevert(245)
     println("numberRevert: $result8")

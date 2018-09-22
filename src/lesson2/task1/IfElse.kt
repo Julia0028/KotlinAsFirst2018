@@ -62,7 +62,19 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+
+
+fun ageDescription(age: Int): String {
+    if (age % 100.0 < 10 || age % 100.0 > 20) {
+        return when (age % 10.0) {
+            1.0 -> "$age год"
+            in 2.0..4.0 -> "$age года"
+            else -> "$age лет"
+        }
+    }
+    else return "$age лет"
+}
+
 
 /**
  * Простая
@@ -73,7 +85,40 @@ fun ageDescription(age: Int): String = TODO()
  */
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
-                   t3: Double, v3: Double): Double = TODO()
+                   t3: Double, v3: Double): Double {
+    val s1 = t1 * v1
+    val s2 = t2 * v2
+    val s3 = t3 * v3
+    val s = (s1 + s2 + s3) / 2
+    var t = 0.0
+    if (s < s1) {
+        t = s / v1
+        return t}
+    if (s == s1) {
+        t = t1
+        return t}
+    if (s > s1) {
+        if (s - s1 < s2) {
+            t = t1 + (s-s1) / v2
+            return t
+        }
+        if (s - s1 > s2) {
+            t = t1 + t2 + (s - s2 - s1) / v3
+            return t
+        }
+        if (s == s2+s1) {
+            t = t1 + t2
+            return t
+        }
+        return t
+    }
+    return t
+}
+
+
+
+
+
 
 /**
  * Простая
@@ -86,8 +131,13 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int = TODO()
+                       rookX2: Int, rookY2: Int): Int {
+    return if (kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2) 0
+    else if (kingX != rookX2 && kingY != rookY2 && (kingX == rookX1 || kingY == rookY1)) 1
+    else if (kingX != rookX1 && kingY != rookY1 && (kingX == rookX2 || kingY == rookY2)) 2
+    else 3
 
+}
 /**
  * Простая
  *
@@ -100,7 +150,14 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int = TODO()
+                          bishopX: Int, bishopY: Int): Int {
+    return if (kotlin.math.abs(kingX - bishopX) == kotlin.math.abs(kingY - bishopY) && kingX != rookX && kingY != rookY) 2
+    else if (kotlin.math.abs(kingX - bishopX) != kotlin.math.abs(kingY - bishopY) && (kingX == rookX || kingY == rookY)) 1
+    else if (kotlin.math.abs(kingX - bishopX) == kotlin.math.abs(kingY - bishopY) && (kingX == rookX || kingY == rookY)) 3
+    else 0
+}
+
+
 
 /**
  * Простая
@@ -110,7 +167,20 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    return if (a < b + c && b < a + c && c < a + b) {
+        var max = a
+        if (b > max) max = b
+        if (c > max) max = c
+        var min = a
+        if (b < min) min = b
+        if (c < min) min = c
+        val t = a + b + c - max - min
+        if (max * max > min * min + t * t) return 2
+        else if (max * max < min * min + t * t) return 0
+        else 1
+    } else return -1
+}
 
 /**
  * Средняя
@@ -120,4 +190,41 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    var t = 0
+    if ((a < c && b < c) || (a > d && b > d)) {
+        t = -1
+        return t
+    }
+    if (a < c && b >= c && b < d) {
+        t = b - c
+        return t
+    }
+    if (a < c && b >= d) {
+        t = d - c
+        return t
+    }
+    if (a >= c && b < d) {
+        t = b - a
+        return t
+    }
+    if (a >= c && b >= d) {
+        t = d - a
+        return t
+    }
+return t
+}
+fun main(args: Array<String>) {
+    val result1 = ageDescription(42)
+    println("ageDescription: $result1")
+    val result2 = timeForHalfWay(2.0, 5.0, 3.0,3.0,2.0,2.0)
+    println("timeForHalfWay: $result2")
+    val result3 = whichRookThreatens(23, 17, 22,11,2,1)
+    println("whichRookThreatens: $result3")
+    val result4 = rookOrBishopThreatens(2, 5, 3, 4,3, 3)
+    println("rookOrBishopThreatens: $result4")
+    val result5 = triangleKind(3.0,4.0,5.0)
+    println("triangleKind: $result5")
+    val result6 = segmentLength(2, 7, 3, 6)
+    println("segmentLength: $result6")
+}

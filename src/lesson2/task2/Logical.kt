@@ -2,6 +2,8 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * Пример
@@ -18,12 +20,9 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    val a = number / 1000
-    val b = number / 100 - a * 10
-    val c = number / 10 - a * 100 - b * 10
-    val d = number - a * 1000 - b * 100 - c * 10
-    if (a + b == c + d) return true
-    else return false
+    val a = number / 1000 + number / 100 % 10
+    val b = number % 100 / 10 + number % 10
+    return (a == b)
 }
 
 
@@ -35,10 +34,9 @@ fun isNumberHappy(number: Int): Boolean {
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    val diagX = kotlin.math.abs(x1 - x2)
-    val diagY = kotlin.math.abs(y1 - y2)
-    if (diagX == diagY || x1 == x2 || y1 == y2) return true
-    else return false
+    val diagX = abs(x1 - x2)
+    val diagY = abs(y1 - y2)
+    return (diagX == diagY || x1 == x2 || y1 == y2)
 }
 
 
@@ -50,11 +48,12 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  */
 fun daysInMonth(month: Int, year: Int): Int {
     if (month == 2) {
-        if (year % 4.0 == 0.0 && year % 100.0 != 0.0) return 29
-        else if (year % 4.0 == 0.0 && year % 100.0 == 0.0 && year % 400.0 == 0.0) return 29
-        else return 28
-    }
-    else return when (month) {
+        return when {
+            year % 4.0 == 0.0 && year % 100.0 != 0.0 -> 29
+            year % 4.0 == 0.0 && year % 100.0 == 0.0 && year % 400.0 == 0.0 -> 29
+            else -> 28
+        }
+    } else return when (month) {
         1, 3, 5, 7, 8, 10, 12 -> 31
         4, 6, 9, 11 -> 30
         else -> 0
@@ -71,8 +70,7 @@ fun daysInMonth(month: Int, year: Int): Int {
 fun circleInside(x1: Double, y1: Double, r1: Double,
                  x2: Double, y2: Double, r2: Double): Boolean {
     val d = sqr(x1 - x2) + sqr(y1 - y2)
-    if (java.lang.Math.sqrt(d) + r1 <= r2) return true
-    else return false
+    return (sqrt(d) + r1 <= r2)
 }
 
 /**
@@ -85,17 +83,19 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    if (a <= r && (b <= s || c <= s)) return true
-    else if (b <= r && (a <= s || c <= s)) return true
-    else if (c <= r && (b <= s || a <= s)) return true
-    else return false
+    return when {
+        (a <= r && (b <= s || c <= s)) -> true
+        (b <= r && (a <= s || c <= s)) -> true
+        (c <= r && (b <= s || a <= s)) -> true
+        else -> false
+    }
 }
 fun main(args: Array<String>) {
-    val result1 = isNumberHappy(2112)
+    val result1 = isNumberHappy(1345)
     println("isNumberHappy: $result1")
-    val result2 = queenThreatens(2, 5, 3, 3)
+    val result2 = queenThreatens(3, 6, 7, 6)
     println("queenThreatens: $result2")
-    val result3 = daysInMonth(2, 2000)
+    val result3 = daysInMonth(2, 1996)
     println("daysInMonth: $result3")
     val result4 = circleInside(2.0, 5.0, 3.0, 4.0, 3.0, 3.0)
     println("circleInside: $result4")

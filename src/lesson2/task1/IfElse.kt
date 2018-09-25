@@ -95,6 +95,7 @@ fun timeForHalfWay(t1: Double, v1: Double,
     return when {
         s < s1 -> s / v1
         s > s1 && s < s2 + s1 -> t1 + (s - s1) / v2
+        s == s1 + s2 -> t1 + t2
         s > s2 + s1 -> t1 + t2 + (s - s2 - s1) / v3
         else -> 0.0
     }
@@ -189,7 +190,7 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
 fun main(args: Array<String>) {
     val result1 = ageDescription(112)
     println("ageDescription: $result1")
-    val result2 = timeForHalfWay(3.0, 0.0, 1.0,6.0,2.0,5.0)
+    val result2 = timeForHalfWay(1.05, 1.0, 1.05,1.0,1.05,2.0)
     println("timeForHalfWay: $result2")
     val result3 = whichRookThreatens(6, 8, 8,6,6,3)
     println("whichRookThreatens: $result3")

@@ -131,8 +131,7 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
-    val index=(percent+100)*0.01
-    val result= initial*index*index*index
+    val result=(percent+100)*(percent+100)*(percent+100)/1000000.0*initial
     return result
 }
 
@@ -160,7 +159,7 @@ fun main(args: Array<String>) {
     println("thirdDigit: $result5")
     val result6 = travelMinutes(12, 0, 23, 15)
     println("travelMinutes: $result6")
-    val result7 = accountInThreeYears(115, 5)
+    val result7 = accountInThreeYears(100, 10)
     println("accountInThreeYears: $result7")
     val result8 = numberRevert(245)
     println("numberRevert: $result8")

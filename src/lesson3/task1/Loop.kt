@@ -1,8 +1,10 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 
+import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.math.min
+import kotlin.math.pow
 
 /**
  * Пример
@@ -108,8 +110,8 @@ fun lcm(m: Int, n: Int): Int {
     var k = m
     var t = n
     while (t != k) {
-        if (t > k) t = t - k
-        else k = k - t
+        if (t > k) t -= k
+        else k -= t
     }
     return m * n / k
 }
@@ -192,7 +194,7 @@ fun collatzSteps(x: Int): Int {
     var i = 0
     var number = x
     while (number != 1) {
-        if (number % 2 == 0) number = number / 2
+        if (number % 2 == 0) number /= 2
         else number = number * 3 + 1
         i++
     }
@@ -206,8 +208,27 @@ fun collatzSteps(x: Int): Int {
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var sinX = 0.0
+    var n = 1
+    var factorial = 1
+    var factorial1 = 1
+    while (abs(sinX) < eps) {
+        for (i in 1..n) {
+            factorial *= i
+        }
+        for (i in 1..(n + 2)) {
+            factorial1 *= i
+        }
+        var x1 = x.pow(n) / factorial
+        sinX += x1
+        var x2 = x.pow((n + 2)) / factorial1
+        sinX -= x2
+        n += 4
+    }
 
+    return sinX
+}
 /**
  * Средняя
  *
@@ -215,7 +236,26 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var cosX = 1.0
+    var n = 2
+    var factorial = 1
+    var factorial1 = 1
+    while (abs(cosX) < eps) {
+        for (i in 1..n) {
+            factorial *= i
+        }
+        for (i in 1..(n + 2)) {
+            factorial1 *= i
+        }
+        var x1 = x.pow(n) / factorial
+        cosX -= x1
+        var x2 = x.pow((n + 2)) / factorial1
+        cosX += x2
+        n += 4
+    }
+    return cosX
+}
 
 /**
  * Средняя
@@ -304,7 +344,8 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int = {
+}
 
 /**
  * Сложная

@@ -344,8 +344,7 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = {
-}
+fun squareSequenceDigit(n: Int): Int = TODO()
 
 /**
  * Сложная

@@ -73,7 +73,7 @@ fun digitNumber(n: Int): Int {
     do {
         number /= 10
         count++
-    } while (number > 0)
+    } while (number != 0)
     return count
 }
 
@@ -166,17 +166,12 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var i = sqrt(m.toDouble()).toInt()
     var k = 0
-    if (i * i < m) i = i + 1
-    while (i * i <= n) {
-        k = i
-        i += 1
+    for (i in sqrt(m.toDouble()).toInt()..sqrt(n.toDouble()).toInt()) {
+        if (i * i >= m && i * i <= n) return true
     }
-    if (k != 0) return true
-    else return false
+    return false
 }
-
 /**
  * Средняя
  *
@@ -237,7 +232,7 @@ fun revert(n: Int): Int {
     var inverseNumber = 0
     while (number > 0) {
         i++
-        number = number / 10
+        number /= 10
     }
     while (i > 1) {
         d *= 10
@@ -245,8 +240,8 @@ fun revert(n: Int): Int {
     }
     while (number1 > 0) {
         inverseNumber = inverseNumber + number1 % 10 * d
-        number1 = number1 / 10
-        d = d / 10
+        number1 /= 10
+        d /= 10
     }
     return inverseNumber
 }
@@ -268,7 +263,7 @@ fun isPalindrome(n: Int): Boolean {
     var inverseNumber = 0
     while (number > 0) {
         i++
-        number = number / 10
+        number /= 10
     }
     while (i > 1) {
         d *= 10
@@ -276,8 +271,8 @@ fun isPalindrome(n: Int): Boolean {
     }
     while (number1 > 0) {
         inverseNumber = inverseNumber + number1 % 10 * d
-        number1 = number1 / 10
-        d = d / 10
+        number1 /= 10
+        d /= 10
     }
 return (n == inverseNumber)
 }
@@ -293,20 +288,13 @@ return (n == inverseNumber)
  */
 fun hasDifferentDigits(n: Int): Boolean {
     var number = n
-    var number1 = n
-    var k = 0
-    var i = number1 % 10
-    while (number1 > 0 && number > 0) {
-        number = number / 10
-        if (number % 10 != i) k++
-        number1 = number1 / 10
-        i = number1 % 10
-
+    val d = n % 10
+    while (number > 0) {
+        if (d != number % 10) return true
+        number /= 10
     }
-    if (k > 0) return true
-    else return false
-    }
-
+    return false
+}
 /**
  * Сложная
  *

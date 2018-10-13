@@ -67,14 +67,13 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
 
 
 fun ageDescription(age: Int): String {
-    if (age % 100 < 10 || age % 100 > 20) {
+    return if (age % 100 < 10 || age % 100 > 20) {
         return when (age % 10) {
             1 -> "$age год"
             in 2..4 -> "$age года"
             else -> "$age лет"
         }
-    }
-    else return "$age лет"
+    } else "$age лет"
 }
 
 
@@ -93,11 +92,9 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s3 = t3 * v3
     val s = (s1 + s2 + s3) / 2
     return when {
-        s < s1 -> s / v1
-        s > s1 && s < s2 + s1 -> t1 + (s - s1) / v2
-        s == s1 + s2 -> t1 + t2
-        s > s2 + s1 -> t1 + t2 + (s - s2 - s1) / v3
-        else -> 0.0
+        s >= s1 && s < s2 + s1 -> t1 + (s - s1) / v2
+        s >= s2 + s1 -> t1 + t2 + (s - s2 - s1) / v3
+        else -> s / v1
     }
 }
 
@@ -155,18 +152,16 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if (a < b + c && b < a + c && c < a + b) {
-        var max = a
-        if (b > max || c > max) max = max(b, c)
-        var min = a
-        if (b < min || c < min) min = min(b, c)
+    return if (a < b + c && b < a + c && c < a + b) {
+        val max = maxOf(a, b, c)
+        val min = minOf(a, b, c)
         val t = a + b + c - max - min
         return when {
             max * max > min * min + t * t -> 2
             max * max < min * min + t * t -> 0
             else -> 1
         }
-    } else return -1
+    } else -1
 }
 
 
@@ -180,10 +175,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     return when {
-        a < c && b >= c && b < d -> b - c
+        c in (a + 1)..b && b < d -> b - c
         a < c && b >= d -> d - c
         a >= c && b < d -> b - a
-        a >= c && a <= d && b >= d -> d - a
+        a in c..d && b >= d -> d - a
         else -> -1
     }
 }

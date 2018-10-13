@@ -2,6 +2,7 @@
 package lesson1.task1
 
 import kotlin.math.*
+import kotlin.math.pow
 
 /**
  * Пример
@@ -130,10 +131,7 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
-fun accountInThreeYears(initial: Int, percent: Int): Double {
-    val result=(percent+100)*(percent+100)*(percent+100)/1000000.0*initial
-    return result
-}
+fun accountInThreeYears(initial: Int, percent: Int)=(percent+100.0).pow(3)/1000000.0*initial
 
 /**
  * Простая

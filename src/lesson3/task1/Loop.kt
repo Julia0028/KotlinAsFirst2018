@@ -344,7 +344,7 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+//fun squareSequenceDigit(n: Int): Int {
 
 /**
  * Сложная
@@ -356,3 +356,79 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int = TODO()
+
+
+
+    fun squareSequenceDigit(n: Int): Int {
+        var f = 0
+        var L = 0
+        var k = n
+        var ost = 0
+        var s = 0
+        var sqr = 0
+        for (i in 1..k) {
+            sqr = i * i
+            var p = sqr
+            while (p / 10 != 0) {
+                p /= 10
+                f++
+            }
+            var d = 1
+            while (f > 1) {
+                d *= 10
+                f -= 1
+            }
+            while (sqr / 10 != 0) {
+                ost = sqr / d
+                L++
+                if (L != k) {
+                    sqr %= d
+                    d /= 10
+                } else s = ost
+            }
+        }
+        return s
+    }
+fun main(args: Array<String>) {
+    fun squareSequenceDigit(n: Int): Int {
+        var f = 0
+        var L = 0
+        var k = n
+        var ost = 0
+        var s = 0
+        var sqr = 0
+        var d = 1
+        for (i in 1..k) {
+            d = 1
+            sqr = i * i
+            if (sqr / 10 > 0) {
+                var p = sqr
+                while (p / 10 != 0) {
+                    f++
+                    p /= 10
+
+                }
+                while (f > 1) {
+                    d *= 10
+                    f -= 1
+                }
+                while (L != k) {
+                    ost = sqr / d
+                    L++
+                    s = ost
+                    sqr %= d
+                    d /= 10
+                }
+            } else {
+                sqr %= 10
+                L++
+                if (L == k) s = sqr
+            }
+        }
+        return s
+    }
+    val result = squareSequenceDigit(11)
+    println("$result ")
+}
+
+

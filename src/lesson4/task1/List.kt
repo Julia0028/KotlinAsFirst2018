@@ -3,7 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson2.task1.*
 import kotlin.math.sqrt
 import kotlin.math.pow
 

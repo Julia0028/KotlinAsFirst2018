@@ -104,8 +104,8 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double {
  * Определить третью цифру справа в этом числе (в данном случае 8).
  */
 fun thirdDigit(number: Int): Int {
-    val num = number/100
-    val result = num%10
+    val num = number / 100
+    val result = num % 10
     return result
 }
 

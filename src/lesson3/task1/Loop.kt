@@ -166,7 +166,6 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     }
     return result == 1
 }
-
 /**
  * Простая
  *

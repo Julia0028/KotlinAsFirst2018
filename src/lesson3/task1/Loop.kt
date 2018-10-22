@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson3.task1
 
 import kotlin.math.abs
@@ -14,7 +15,7 @@ import kotlin.math.pow
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
-        result = result * i // Please do not fix in master
+        result *= i // Please do not fix in master
     }
     return result
 }
@@ -41,7 +42,7 @@ fun isPrime(n: Int): Boolean {
  */
 fun isPerfect(n: Int): Boolean {
     var sum = 1
-    for (m in 2..n/2) {
+    for (m in 2..n / 2) {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -115,6 +116,7 @@ fun lcm(m: Int, n: Int): Int {
     }
     return m * n / k
 }
+
 /**
  * Простая
  *
@@ -156,8 +158,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
         if (m % i == 0 && n % i == 0) k = i
         i -= 1
     } while (i > 1)
-    return if (k == 1) true
-    else false
+    return k == 1
 }
 
 /**
@@ -168,12 +169,12 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var k = 0
     for (i in sqrt(m.toDouble()).toInt()..sqrt(n.toDouble()).toInt()) {
-        if (i * i >= m && i * i <= n) return true
+        if (i * i in m..n) return true
     }
     return false
 }
+
 /**
  * Средняя
  *
@@ -220,15 +221,16 @@ fun sin(x: Double, eps: Double): Double {
         for (i in 1..(n + 2)) {
             factorial1 *= i
         }
-        var x1 = x.pow(n) / factorial
+        val x1 = x.pow(n) / factorial
         sinX += x1
-        var x2 = x.pow((n + 2)) / factorial1
+        val x2 = x.pow((n + 2)) / factorial1
         sinX -= x2
         n += 4
     }
 
     return sinX
 }
+
 /**
  * Средняя
  *
@@ -248,9 +250,9 @@ fun cos(x: Double, eps: Double): Double {
         for (i in 1..(n + 2)) {
             factorial1 *= i
         }
-        var x1 = x.pow(n) / factorial
+        val x1 = x.pow(n) / factorial
         cosX -= x1
-        var x2 = x.pow((n + 2)) / factorial1
+        val x2 = x.pow((n + 2)) / factorial1
         cosX += x2
         n += 4
     }
@@ -279,7 +281,7 @@ fun revert(n: Int): Int {
         i -= 1
     }
     while (number1 > 0) {
-        inverseNumber = inverseNumber + number1 % 10 * d
+        inverseNumber += number1 % 10 * d
         number1 /= 10
         d /= 10
     }
@@ -310,11 +312,11 @@ fun isPalindrome(n: Int): Boolean {
         i -= 1
     }
     while (number1 > 0) {
-        inverseNumber = inverseNumber + number1 % 10 * d
+        inverseNumber += number1 % 10 * d
         number1 /= 10
         d /= 10
     }
-return (n == inverseNumber)
+    return (n == inverseNumber)
 }
 
 
@@ -335,6 +337,7 @@ fun hasDifferentDigits(n: Int): Boolean {
     }
     return false
 }
+
 /**
  * Сложная
  *
@@ -344,7 +347,7 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-//fun squareSequenceDigit(n: Int): Int {
+fun squareSequenceDigit(n: Int): Int = TODO()
 
 /**
  * Сложная
@@ -356,79 +359,4 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int = TODO()
-
-
-
-    fun squareSequenceDigit(n: Int): Int {
-        var f = 0
-        var L = 0
-        var k = n
-        var ost = 0
-        var s = 0
-        var sqr = 0
-        for (i in 1..k) {
-            sqr = i * i
-            var p = sqr
-            while (p / 10 != 0) {
-                p /= 10
-                f++
-            }
-            var d = 1
-            while (f > 1) {
-                d *= 10
-                f -= 1
-            }
-            while (sqr / 10 != 0) {
-                ost = sqr / d
-                L++
-                if (L != k) {
-                    sqr %= d
-                    d /= 10
-                } else s = ost
-            }
-        }
-        return s
-    }
-fun main(args: Array<String>) {
-    fun squareSequenceDigit(n: Int): Int {
-        var f = 0
-        var L = 0
-        var k = n
-        var ost = 0
-        var s = 0
-        var sqr = 0
-        var d = 1
-        for (i in 1..k) {
-            d = 1
-            sqr = i * i
-            if (sqr / 10 > 0) {
-                var p = sqr
-                while (p / 10 != 0) {
-                    f++
-                    p /= 10
-
-                }
-                while (f > 1) {
-                    d *= 10
-                    f -= 1
-                }
-                while (L != k) {
-                    ost = sqr / d
-                    L++
-                    s = ost
-                    sqr %= d
-                    d /= 10
-                }
-            } else {
-                sqr %= 10
-                L++
-                if (L == k) s = sqr
-            }
-        }
-        return s
-    }
-    val result = squareSequenceDigit(11)
-    println("$result ")
-}
-
 

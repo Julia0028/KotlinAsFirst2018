@@ -1,11 +1,12 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.max
 import kotlin.math.sqrt
 import kotlin.math.abs
-import kotlin.math.min
+
 
 /**
  * Пример
@@ -99,8 +100,6 @@ fun timeForHalfWay(t1: Double, v1: Double,
 }
 
 
-
-
 /**
  * Простая
  *
@@ -120,6 +119,7 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
         else -> 3
     }
 }
+
 /**
  * Простая
  *
@@ -140,7 +140,6 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
         else -> 0
     }
 }
-
 
 
 /**
@@ -182,16 +181,17 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
         else -> -1
     }
 }
+
 fun main(args: Array<String>) {
     val result1 = ageDescription(112)
     println("ageDescription: $result1")
-    val result2 = timeForHalfWay(1.05, 1.0, 1.05,1.0,1.05,2.0)
+    val result2 = timeForHalfWay(1.05, 1.0, 1.05, 1.0, 1.05, 2.0)
     println("timeForHalfWay: $result2")
-    val result3 = whichRookThreatens(6, 8, 8,6,6,3)
+    val result3 = whichRookThreatens(6, 8, 8, 6, 6, 3)
     println("whichRookThreatens: $result3")
-    val result4 = rookOrBishopThreatens(5, 4, 3, 7,1, 8)
+    val result4 = rookOrBishopThreatens(5, 4, 3, 7, 1, 8)
     println("rookOrBishopThreatens: $result4")
-    val result5 = triangleKind(1.0,1.5,1.5)
+    val result5 = triangleKind(1.0, 7.5, 1.5)
     println("triangleKind: $result5")
     val result6 = segmentLength(5, 7, 1, 3)
     println("segmentLength: $result6")

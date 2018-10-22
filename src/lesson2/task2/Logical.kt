@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task2
 
 import lesson1.task1.sqr
@@ -47,8 +48,8 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-return if (month == 2) {
-        return when {
+    return if (month == 2) {
+        when {
             year % 4.0 == 0.0 && year % 100.0 != 0.0 -> 29
             year % 4.0 == 0.0 && year % 100.0 == 0.0 && year % 400.0 == 0.0 -> 29
             else -> 28
@@ -90,6 +91,7 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
         else -> false
     }
 }
+
 fun main(args: Array<String>) {
     val result1 = isNumberHappy(1345)
     println("isNumberHappy: $result1")

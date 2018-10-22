@@ -81,7 +81,8 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = (a <= r && (b <= s || c <= s)) || (b <= r && (a <= s || c <= s)) || (c <= r && (b <= s || a <= s))
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
+        (a <= r && (b <= s || c <= s)) || (b <= r && (a <= s || c <= s)) || (c <= r && (b <= s || a <= s))
 
 fun main(args: Array<String>) {
     val result1 = isNumberHappy(1345)

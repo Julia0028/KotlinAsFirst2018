@@ -123,13 +123,15 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var i = 2
-    while (n % i != 0) {
-        i += 1
+    var result = n
+    for (i in 2..sqrt(n.toDouble()).toInt()) {
+        if (n % i == 0) {
+            result = i
+            break
+        }
     }
-    return i
+    return result
 }
-
 
 /**
  * Простая
@@ -137,11 +139,14 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var i = n - 1
-    while (n % i != 0) {
-        i -= 1
+    var result = 1
+    for (i in n / 2 downTo 2) {
+        if (n % i == 0) {
+            result = i
+            break
+        }
     }
-    return i
+    return result
 }
 
 /**
@@ -152,15 +157,15 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var k = 1
-    var i = min(m, n)
-    do {
-        if (m % i == 0 && n % i == 0) k = i
-        i -= 1
-    } while (i > 1)
-    return k == 1
+    var result = 1
+    val min = min(m, n)
+    for (i in min downTo 2) {
+        if (n % i == 0 && m % i == 0) {
+            result = i
+        }
+    }
+    return result == 1
 }
-
 /**
  * Простая
  *

@@ -47,18 +47,16 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    return if (month == 2) {
-        when {
-            year % 4.0 == 0.0 && year % 100.0 != 0.0 -> 29
-            year % 4.0 == 0.0 && year % 100.0 == 0.0 && year % 400.0 == 0.0 -> 29
-            else -> 28
-        }
-    } else when (month) {
-        1, 3, 5, 7, 8, 10, 12 -> 31
-        4, 6, 9, 11 -> 30
-        else -> 0
+fun daysInMonth(month: Int, year: Int): Int = if (month == 2) {
+    when {
+        year % 4.0 == 0.0 && year % 100.0 != 0.0 -> 29
+        year % 4.0 == 0.0 && year % 100.0 == 0.0 && year % 400.0 == 0.0 -> 29
+        else -> 28
     }
+} else when (month) {
+    1, 3, 5, 7, 8, 10, 12 -> 31
+    4, 6, 9, 11 -> 30
+    else -> 0
 }
 
 /**
@@ -83,14 +81,7 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    return when {
-        (a <= r && (b <= s || c <= s)) -> true
-        (b <= r && (a <= s || c <= s)) -> true
-        (c <= r && (b <= s || a <= s)) -> true
-        else -> false
-    }
-}
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = (a <= r && (b <= s || c <= s)) || (b <= r && (a <= s || c <= s)) || (c <= r && (b <= s || a <= s))
 
 fun main(args: Array<String>) {
     val result1 = isNumberHappy(1345)

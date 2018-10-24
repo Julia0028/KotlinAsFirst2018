@@ -116,7 +116,6 @@ fun lcm(m: Int, n: Int): Int {
     }
     return m * n / k
 }
-
 /**
  * Простая
  *

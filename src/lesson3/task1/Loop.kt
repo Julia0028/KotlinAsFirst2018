@@ -2,10 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.abs
-import kotlin.math.sqrt
-import kotlin.math.min
-import kotlin.math.pow
+import kotlin.math.*
 
 /**
  * Пример
@@ -124,7 +121,7 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun minDivisor(n: Int): Int {
     var result = n
-    for (i in 2..sqrt(n.toDouble()).toInt()) {
+    for (i in 2..round(sqrt(n.toDouble())).toInt()) {
         if (n % i == 0) {
             result = i
             break
@@ -157,14 +154,14 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var result = 1
-    val min = min(m, n)
-    for (i in min downTo 2) {
-        if (n % i == 0 && m % i == 0) {
-            result = i
-        }
+    var k = m
+    var t = n
+    while (t != 0) {
+        val nod = k % t
+        k = t
+        t = nod
     }
-    return result == 1
+    return k == 1
 }
 
 /**
@@ -175,10 +172,9 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    for (i in sqrt(m.toDouble()).toInt()..sqrt(n.toDouble()).toInt()) {
-        if (i * i in m..n) return true
-    }
-    return false
+    var i = sqrt(m.toDouble())
+    i = ceil(i)
+    return (i * i in m..n)
 }
 
 /**

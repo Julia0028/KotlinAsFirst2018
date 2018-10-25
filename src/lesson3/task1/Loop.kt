@@ -269,21 +269,13 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var i = 0
-    var number = n
     var number1 = n
-    var d = 1
+    var d = 10.0
     var inverseNumber = 0
-    while (number > 0) {
-        i++
-        number /= 10
-    }
-    while (i > 1) {
-        d *= 10
-        i -= 1
-    }
+    val i = digitNumber(n)
+    d = d.pow(i - 1)
     while (number1 > 0) {
-        inverseNumber += number1 % 10 * d
+        inverseNumber += number1 % 10 * d.toInt()
         number1 /= 10
         d /= 10
     }
@@ -300,25 +292,8 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var i = 0
-    var number = n
-    var number1 = n
-    var d = 1
-    var inverseNumber = 0
-    while (number > 0) {
-        i++
-        number /= 10
-    }
-    while (i > 1) {
-        d *= 10
-        i -= 1
-    }
-    while (number1 > 0) {
-        inverseNumber += number1 % 10 * d
-        number1 /= 10
-        d /= 10
-    }
-    return (n == inverseNumber)
+    val number = revert(n)
+    return (number == n)
 }
 
 

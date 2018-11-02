@@ -5,6 +5,9 @@ package lesson4.task1
 import lesson1.task1.discriminant
 import kotlin.math.sqrt
 import kotlin.math.pow
+import lesson3.task1.isPrime
+import kotlin.math.ceil
+
 
 /**
  * Пример
@@ -122,8 +125,7 @@ fun abs(v: List<Double>): Double {
         val element = v[i] * v[i]
         result.add(element)
     }
-    return if (result.isNotEmpty()) sqrt(result.sum())
-    else return 0.0
+    return sqrt(result.sum())
 }
 
 
@@ -132,11 +134,9 @@ fun abs(v: List<Double>): Double {
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return when {
-        list.isNotEmpty() -> list.sum() / list.size
-        else -> 0.0
-    }
+fun mean(list: List<Double>): Double = when {
+    list.isNotEmpty() -> list.sum() / list.size
+    else -> 0.0
 }
 
 /**
@@ -148,12 +148,10 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    if (list.isNotEmpty()) {
-        val middle = list.sum() / list.size
-        for (i in 0 until list.size) {
-            val element = list[i] - middle
-            list[i] = element
-        }
+    val middle = mean(list)
+    for (i in 0 until list.size) {
+        val element = list[i] - middle
+        list[i] = element
     }
     return list
 }
@@ -166,15 +164,12 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
 fun times(a: List<Double>, b: List<Double>): Double {
-    if (a.isNotEmpty() && b.isNotEmpty()) {
-        val result = mutableListOf<Double>()
-        for (i in 0 until a.size) {
-            val element = a[i] * b[i]
-            result.add(element)
-        }
-        return result.sum()
+    val result = mutableListOf<Double>()
+    for (i in 0 until a.size) {
+        val element = a[i] * b[i]
+        result.add(element)
     }
-    return 0.0
+    return result.sum()
 }
 
 /**
@@ -208,10 +203,8 @@ fun polynom(p: List<Double>, x: Double): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
-    if (list.isNotEmpty()) {
-        for (i in 1 until list.size) {
-            list[i] += list[i - 1]
-        }
+    for (i in 1 until list.size) {
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -225,17 +218,19 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  */
 fun factorize(n: Int): List<Int> {
     var number = n
-    var factor = 2
     val list = mutableListOf<Int>()
-    while (number > 1) {
-        while (number % factor == 0) {
-            list.add(factor)
-            number /= factor
+    if (isPrime(n)) list.add(n)
+    else {
+        for (i in 2..ceil(sqrt(n.toDouble())).toInt()) {
+            while (number % i == 0 && number > 1) {
+                list.add(i)
+                number /= i
+            }
         }
-        factor += 1
     }
-    return (list.sorted())
+    return (list)
 }
+
 
 /**
  * Сложная
@@ -245,19 +240,8 @@ fun factorize(n: Int): List<Int> {
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
 fun factorizeToString(n: Int): String {
-
-    var number = n
-    var factor = 2
-    val list = mutableListOf<Int>()
-    while (number > 1) {
-        while (number % factor == 0) {
-            list.add(factor)
-            number /= factor
-        }
-        factor += 1
-    }
-    if (list.size > 1) return list.sorted().joinToString(separator = "*")
-    return list.sorted().joinToString()
+    val list = factorize(n)
+    return list.joinToString(separator = "*")
 }
 
 
@@ -346,18 +330,13 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     var abc = ""
     val list = mutableListOf<Int>()
-    var sum = 0
     for (k in 'a'..'z') abc += k
     for (i in 0 until str.length) {
         if (str[i] in abc) list.add((str[i].toInt() - 'a'.toInt()) + 10)
         else list.add(str[i].toInt() - '0'.toInt())
 
     }
-    for (i in 0 until list.size) {
-        val result = list[i] * base.toDouble().pow(list.size - 1 - i).toInt()
-        sum += result
-    }
-    return sum
+    return decimal(list, base)
 }
 
 
@@ -370,15 +349,16 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val rome: Array<String> = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
-    val arab: Array<Int> = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    val rome = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val arab = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     var result = ""
     var number = n
-    var i = 12
+    var arrayNumber = 12
+    // если в число входит послед элемент массива arab, учитываем, нет - берем след с конца
     while (number > 0) {
-        while (arab[i] > number) i -= 1
-        result += rome[i]
-        number -= arab[i]
+        while (arab[arrayNumber] > number) arrayNumber -= 1
+        result += rome[arrayNumber]
+        number -= arab[arrayNumber]
     }
     return result
 }

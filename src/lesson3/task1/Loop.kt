@@ -3,7 +3,6 @@
 package lesson3.task1
 
 import kotlin.math.*
-
 /**
  * Пример
  *
@@ -120,14 +119,10 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var result = n
-    for (i in 2..round(sqrt(n.toDouble())).toInt()) {
-        if (n % i == 0) {
-            result = i
-            break
-        }
+    for (i in 2..n / 2) {
+        if (n % i == 0) return i
     }
-    return result
+    return n
 }
 
 /**
@@ -212,27 +207,17 @@ fun collatzSteps(x: Int): Int {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double {
-    var sinX = 0.0
-    var n = 1
-    var factorial = 1
-    var factorial1 = 1
-    while (abs(sinX) < eps) {
-        for (i in 1..n) {
-            factorial *= i
-        }
-        for (i in 1..(n + 2)) {
-            factorial1 *= i
-        }
-        val x1 = x.pow(n) / factorial
-        sinX += x1
-        val x2 = x.pow((n + 2)) / factorial1
-        sinX -= x2
-        n += 4
+    val t = x % (PI * 2)
+    var sum = 0.0
+    var sinX = t
+    var i = 1
+    while (abs(sinX) >= abs(eps)) {
+        sum += sinX
+        sinX = -sinX * t.pow(2) / (i + 1) / (i + 2)
+        i += 2
     }
-
-    return sinX
+    return sum
 }
-
 /**
  * Средняя
  *
@@ -241,24 +226,16 @@ fun sin(x: Double, eps: Double): Double {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun cos(x: Double, eps: Double): Double {
+    val t = x % (PI * 2)
+    var sum = 1.0
     var cosX = 1.0
-    var n = 2
-    var factorial = 1
-    var factorial1 = 1
-    while (abs(cosX) < eps) {
-        for (i in 1..n) {
-            factorial *= i
-        }
-        for (i in 1..(n + 2)) {
-            factorial1 *= i
-        }
-        val x1 = x.pow(n) / factorial
-        cosX -= x1
-        val x2 = x.pow((n + 2)) / factorial1
-        cosX += x2
-        n += 4
+    var i = 0
+    while (abs(cosX) >= abs(eps)) {
+        cosX = -cosX * t.pow(2) / (i + 1) / (i + 2)
+        sum += cosX
+        i += 2
     }
-    return cosX
+    return sum
 }
 
 /**

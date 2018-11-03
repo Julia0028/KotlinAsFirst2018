@@ -8,7 +8,6 @@ import kotlin.math.pow
 import lesson3.task1.isPrime
 
 
-
 /**
  * Пример
  *
@@ -259,7 +258,8 @@ fun convert(n: Int, base: Int): List<Int> {
         list.add(number % base)
         number /= base
     }
-    return list.reversed()
+    return if (list.isNotEmpty()) list.reversed()
+    else listOf(0)
 }
 
 

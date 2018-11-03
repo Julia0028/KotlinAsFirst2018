@@ -6,7 +6,6 @@ import lesson1.task1.discriminant
 import kotlin.math.sqrt
 import kotlin.math.pow
 import lesson3.task1.isPrime
-import kotlin.math.ceil
 
 
 /**
@@ -221,7 +220,7 @@ fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
     if (isPrime(n)) list.add(n)
     else {
-        for (i in 2..ceil(sqrt(n.toDouble())).toInt()) {
+        for (i in 2..n / 2) {
             while (number % i == 0 && number > 1) {
                 list.add(i)
                 number /= i
@@ -255,18 +254,11 @@ fun factorizeToString(n: Int): String {
 fun convert(n: Int, base: Int): List<Int> {
     val list = mutableListOf<Int>()
     var number = n
-    if (number > base) {
-        while (number > 0) {
-            list.add(number % base)
-            number /= base
-        }
-    } else list.add(number)
-    for (i in 0 until list.size / 2) {
-        val element = list[i]
-        list[i] = list[list.size - 1 - i]
-        list[list.size - 1 - i] = element
+    while (number > 0) {
+        list.add(number % base)
+        number /= base
     }
-    return list
+    return list.reversed()
 }
 
 
@@ -279,24 +271,10 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    val list = mutableListOf<Int>()
-    var number = n
-    if (number > base) {
-        while (number > 0) {
-            list.add(number % base)
-            number /= base
-        }
-    } else list.add(number)
-    for (i in 0 until list.size / 2) {
-        val element = list[i]
-        list[i] = list[list.size - 1 - i]
-        list[list.size - 1 - i] = element
-    }
+    val list = convert(n, base)
     var string = ""
-    var abc = ""
-    for (k in 'a'..'z') abc += k
     for (i in 0 until list.size) {
-        string += if (list[i] > 9) abc[list[i] - 10]
+        string += if (list[i] > 9) 'a' - 10 + list[i]
         else list[i]
     }
     return string
@@ -328,11 +306,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Например: str = "13c", base = 14 -> 250
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var abc = ""
     val list = mutableListOf<Int>()
-    for (k in 'a'..'z') abc += k
     for (i in 0 until str.length) {
-        if (str[i] in abc) list.add((str[i].toInt() - 'a'.toInt()) + 10)
+        if (str[i].toInt() >= 'a'.toInt()) list.add((str[i].toInt() - 'a'.toInt()) + 10)
         else list.add(str[i].toInt() - '0'.toInt())
 
     }
@@ -351,16 +327,16 @@ fun decimalFromString(str: String, base: Int): Int {
 fun roman(n: Int): String {
     val rome = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val arab = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-    var result = ""
+    val result = StringBuilder()
     var number = n
     var arrayNumber = 12
     // если в число входит послед элемент массива arab, учитываем, нет - берем след с конца
     while (number > 0) {
         while (arab[arrayNumber] > number) arrayNumber -= 1
-        result += rome[arrayNumber]
+        result.append(rome[arrayNumber])
         number -= arab[arrayNumber]
     }
-    return result
+    return result.toString()
 }
 
 

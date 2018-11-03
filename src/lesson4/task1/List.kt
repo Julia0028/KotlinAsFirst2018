@@ -8,6 +8,7 @@ import kotlin.math.pow
 import lesson3.task1.isPrime
 
 
+
 /**
  * Пример
  *

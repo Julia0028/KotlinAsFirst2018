@@ -351,6 +351,7 @@ fun roman(n: Int): String {
 //С помощью функции digit вытаскиваю определенную цифру из n. Если n больше 1000, маюсь с прибавлением к строке
 // "тысяч" и прибавляю соответствующее слово вместо цифры, если нет, просто заменяю цифру
 fun digit(n: Int, k: Int): Int = n % (10.0.pow(k)).toInt() / (10.0.pow(k - 1)).toInt()
+
 fun hundreds(n: Int): String = when (n) {
     1 -> "сто "
     2 -> "двести "
@@ -363,6 +364,7 @@ fun hundreds(n: Int): String = when (n) {
     9 -> "девятьсот "
     else -> ""
 }
+
 fun ten(n: Int): String = when (n) {
     2 -> "двадцать "
     3 -> "тридцать "
@@ -374,6 +376,7 @@ fun ten(n: Int): String = when (n) {
     9 -> "девяносто "
     else -> ""
 }
+
 fun ten1(n: Int): String = when (n) {
     1 -> "одиннадцать "
     2 -> "двенадцать "
@@ -386,6 +389,7 @@ fun ten1(n: Int): String = when (n) {
     9 -> "девятнадцать "
     else -> "десять "
 }
+
 fun one(n: Int): String = when (n) {
     1 -> ""
     2 -> ""
@@ -398,6 +402,7 @@ fun one(n: Int): String = when (n) {
     9 -> "девять "
     else -> ""
 }
+
 fun russian(n: Int): String {
     val str = StringBuilder()
     if (n > 1000) {

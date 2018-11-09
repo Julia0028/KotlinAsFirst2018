@@ -231,6 +231,7 @@ fun factorize(n: Int): List<Int> {
 }
 
 
+
 /**
  * Сложная
  *

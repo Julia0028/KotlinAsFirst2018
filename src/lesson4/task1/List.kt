@@ -6,7 +6,6 @@ import lesson1.task1.discriminant
 import kotlin.math.sqrt
 import kotlin.math.pow
 import lesson3.task1.isPrime
-import lesson3.task1.minDivisor
 
 
 /**
@@ -349,6 +348,8 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 
+//С помощью функции digit вытаскиваю определенную цифру из n. Если n больше 1000, маюсь с прибавлением к строке
+// "тысяч" и прибавляю соответствующее слово вместо цифры, если нет, просто заменяю цифру
 fun digit(n: Int, k: Int): Int = n % (10.0.pow(k)).toInt() / (10.0.pow(k - 1)).toInt()
 fun hundreds(n: Int): String = when (n) {
     1 -> "сто "
@@ -388,13 +389,13 @@ fun ten1(n: Int): String = when (n) {
 fun one(n: Int): String = when (n) {
     1 -> ""
     2 -> ""
-    3 -> "три"
-    4 -> "четыре"
-    5 -> "пять"
-    6 -> "шесть"
-    7 -> "семь"
-    8 -> "восемь"
-    9 -> "девять"
+    3 -> "три "
+    4 -> "четыре "
+    5 -> "пять "
+    6 -> "шесть "
+    7 -> "семь "
+    8 -> "восемь "
+    9 -> "девять "
     else -> ""
 }
 fun russian(n: Int): String {

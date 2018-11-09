@@ -6,6 +6,7 @@ import lesson1.task1.discriminant
 import kotlin.math.sqrt
 import kotlin.math.pow
 import lesson3.task1.isPrime
+import lesson3.task1.minDivisor
 
 
 /**
@@ -220,14 +221,12 @@ fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
     if (isPrime(n)) list.add(n)
     else {
-        for (i in 2..n / 2) {
-            while (number % i == 0 && number > 1) {
-                list.add(i)
-                number /= i
-            }
+        while (number > 1) {
+            list.add(minDivisor(number))
+            number /= minDivisor(number)
         }
     }
-    return (list)
+    return list
 }
 
 
@@ -273,12 +272,12 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
-    var string = ""
+    val str = StringBuilder()
     for (i in 0 until list.size) {
-        string += if (list[i] > 9) 'a' - 10 + list[i]
-        else list[i]
+        if (list[i] > 9) str.append('a' - 10 + list[i])
+        else str.append(list[i])
     }
-    return string
+    return str.toString()
 }
 
 /**

@@ -221,7 +221,7 @@ fun factorize(n: Int): List<Int> {
     val list = mutableListOf<Int>()
     if (isPrime(n)) list.add(n)
     for (i in 2..n / 2) {
-        while (number % i == 0 && number > 1) {
+        while (number % i == 0) {
             list.add(i)
             number /= i
         }
@@ -229,7 +229,6 @@ fun factorize(n: Int): List<Int> {
     }
     return list
 }
-
 
 
 /**

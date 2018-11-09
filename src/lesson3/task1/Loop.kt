@@ -119,12 +119,7 @@ fun lcm(m: Int, n: Int): Int {
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int {
-    for (i in 2..ceil(sqrt(n.toDouble())).toInt()) {
-        if (n % i == 0) return i
-    }
-    return n
-}
+fun minDivisor(n: Int): Int = n / maxDivisor(n)
 
 /**
  * Простая
@@ -189,6 +184,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
+
 fun collatzSteps(x: Int): Int {
     var i = 0
     var number = x
@@ -207,18 +203,21 @@ fun collatzSteps(x: Int): Int {
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun sin(x: Double, eps: Double): Double {
+
+fun myHelperFun(x: Double, eps: Double, i: Int, addition: Double): Double {
     val t = x % (PI * 2)
     var sum = 0.0
-    var sinX = t
-    var i = 1
-    while (abs(sinX) >= abs(eps)) {
-        sum += sinX
-        sinX = -sinX * t.pow(2) / (i + 1) / (i + 2)
-        i += 2
+    var trig = addition
+    var a = i
+    while (abs(trig) >= abs(eps)) {
+        sum += trig
+        trig = -trig * t.pow(2) / (a + 1) / (a + 2)
+        a += 2
     }
     return sum
 }
+
+fun sin(x: Double, eps: Double): Double = myHelperFun(x, eps, 1, x % (PI * 2))
 
 /**
  * Средняя
@@ -227,18 +226,7 @@ fun sin(x: Double, eps: Double): Double {
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double {
-    val t = x % (PI * 2)
-    var sum = 1.0
-    var cosX = 1.0
-    var i = 0
-    while (abs(cosX) >= abs(eps)) {
-        cosX = -cosX * t.pow(2) / (i + 1) / (i + 2)
-        sum += cosX
-        i += 2
-    }
-    return sum
-}
+fun cos(x: Double, eps: Double): Double = myHelperFun(x, eps, 0, 1.0)
 
 /**
  * Средняя

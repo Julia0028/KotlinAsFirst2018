@@ -330,7 +330,7 @@ fun roman(n: Int): String {
     val arab = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     val result = StringBuilder()
     var number = n
-    var arrayNumber = 12
+    var arrayNumber = arab.size - 1
     // если в число входит послед элемент массива arab, учитываем, нет - берем след с конца
     while (number > 0) {
         while (arab[arrayNumber] > number) arrayNumber -= 1

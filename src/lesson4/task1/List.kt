@@ -220,11 +220,12 @@ fun factorize(n: Int): List<Int> {
     var number = n
     val list = mutableListOf<Int>()
     if (isPrime(n)) list.add(n)
-    else {
-        while (number > 1) {
-            list.add(minDivisor(number))
-            number /= minDivisor(number)
+    for (i in 2..n / 2) {
+        while (number % i == 0 && number > 1) {
+            list.add(i)
+            number /= i
         }
+        if (number == 1) break
     }
     return list
 }

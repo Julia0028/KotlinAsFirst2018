@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -49,12 +51,10 @@ fun main(args: Array<String>) {
         val seconds = timeStrToSeconds(line)
         if (seconds == -1) {
             println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
+        } else {
             println("Прошло секунд с начала суток: $seconds")
         }
-    }
-    else {
+    } else {
         println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
     }
 }
@@ -71,7 +71,22 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+
+fun dateStrToDigit(str: String): String {
+    val parts = str.split(" ")
+    val mapMonths = mapOf("января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5,
+            "июня" to 6, "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12)
+    return try {
+        if (parts.size != 3) throw NumberFormatException("Description")
+        val month = mapMonths[parts[1]] ?: throw NumberFormatException("Description")
+        val day = parts[0].toInt()
+        val year = parts[2].toInt()
+        if (day !in 1..daysInMonth(month, year)) throw NumberFormatException("Description")
+        String.format("%02d.%02d.%d", day, month, year)
+    } catch (e: NumberFormatException) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -83,7 +98,21 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split(".")
+    val mapMonths = mapOf(1 to "января", 2 to "февраля", 3 to "марта", 4 to "апреля", 5 to "мая",
+            6 to "июня", 7 to "июля", 8 to "августа", 9 to "сентября", 10 to "октября", 11 to "ноября", 12 to "декабря")
+    return try {
+        if (parts.size != 3) throw NumberFormatException("Description")
+        val month = mapMonths[parts[1].toInt()] ?: throw NumberFormatException("Description")
+        val day = parts[0].toInt()
+        val year = parts[2].toInt()
+        if (day !in 1..daysInMonth(parts[1].toInt(), year)) throw NumberFormatException("Description")
+        String.format("%d %s %d", day, month, year)
+    } catch (e: NumberFormatException) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -97,7 +126,15 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    return try {
+        if (phone.all { it in "+-()1234567890 " })
+            phone.filter { it in "+1234567890" }
+        else throw NumberFormatException("Description")
+    } catch (e: NumberFormatException) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -109,7 +146,20 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val parts = jumps.split(" ")
+    val list = mutableListOf<Int>()
+    return try {
+        if (jumps.any { it in "1234567890" }) {
+            for (part in parts) if (part !in listOf("-", "%")) list.add(part.toInt())
+        } else throw NumberFormatException("Description")
+        val res = list.sorted()
+        res.last()
+    } catch (e: NumberFormatException) {
+        -1
+    }
+}
+
 
 /**
  * Сложная
@@ -121,7 +171,18 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val list = mutableListOf<Int>()
+    return try {
+        if (jumps.all { it in "1234567890+%- " }) {
+            val parts = jumps.split(" ")
+            for (i in 0 until parts.size - 1 step 2) if (parts[i + 1] == "+") list.add(parts[i].toInt())
+            list.max()!!
+        } else throw NumberFormatException("Description")
+    } catch (e: NumberFormatException) {
+        -1
+    }
+}
 
 /**
  * Сложная
@@ -132,7 +193,26 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val list = mutableListOf<String>()
+    if (!expression.all { it in "1234567890+- " }) throw IllegalArgumentException()
+    if (expression.startsWith('+') || expression.startsWith('-')) throw IllegalArgumentException()
+    val parts = expression.split(" ")
+    for (i in 0 until parts.size - 1 step 2) {
+        if (parts[i] !in listOf("+", "-") && parts[i].toInt() >= 0)
+            list.add(parts[i]) else throw IllegalArgumentException()
+        if (parts[i + 1] in listOf("+", "-")) list.add(parts[i + 1]) else throw IllegalArgumentException()
+    }
+    if (parts.last().toInt() >= 0) list.add(parts.last())
+    if (list.size != parts.size) throw IllegalArgumentException()
+    var sum = list.first().toInt()
+    for (i in 1 until list.size - 1 step 2) {
+        if (list[i] == "+") sum += list[i + 1].toInt()
+        if (list[i] == "-") sum += -list[i + 1].toInt()
+    }
+    return sum
+}
+
 
 /**
  * Сложная
@@ -143,7 +223,21 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val parts = str.toLowerCase().split(" ")
+    var sum = 0
+    var t = 0
+    return try {
+        for (i in 0 until parts.size - 1) {
+            if (parts[i] == parts[i + 1]) sum = t
+            else t += parts[i].length + 1
+        }
+        if (sum == 0) throw NumberFormatException("Description")
+        else sum
+    } catch (e: NumberFormatException) {
+        -1
+    }
+}
 
 /**
  * Сложная
@@ -156,7 +250,28 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val part = description.split("; ")
+    val map = mutableMapOf<String, Double>()
+    var max = 0.0
+    var res = ""
+    try {
+        for (parts in part) {
+            val t = parts.split(" ")
+            map[t.first()] = t.last().toDouble()
+        }
+
+        for ((key, value) in map) {
+            if (value >= max) {
+                max = value
+                res = key
+            }
+        }
+        return res
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
 
 /**
  * Сложная
@@ -169,7 +284,26 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+
+//В задаче ниже в качестве ключа для map я делаю разность кода нужного символа (I,V,X,L...) и кода "А"
+// из ASCLL соответсвенно. Значение - римская цифра в десятичной системе счисления
+fun fromRoman(roman: String): Int {
+    var sum = 0
+    val map = mutableMapOf(8 to 1, 21 to 5, 23 to 10, 11 to 50, 2 to 100, 3 to 500, 12 to 1000)
+    return try {
+        if (roman.all { it in "IVXLCDM" }) {
+            for (i in 0 until roman.length - 1) {
+                sum += if (map[roman[i].toInt() - 'A'.toInt()]!! < map[roman[i + 1].toInt() - 'A'.toInt()]!!)
+                    -map[roman[i].toInt() - 'A'.toInt()]!!
+                else map[roman[i].toInt() - 'A'.toInt()]!!
+            }
+            sum += map[roman.last().toInt() - 'A'.toInt()]!!
+            sum
+        } else throw NumberFormatException("Description")
+    } catch (e: NumberFormatException) {
+        -1
+    }
+}
 
 /**
  * Очень сложная

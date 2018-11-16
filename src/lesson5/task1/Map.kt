@@ -193,11 +193,13 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *   ) -> "Мария"
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
-    var t = MAX_VALUE
+    var min = 0.0
+    var i = 1
     var res: String? = null
     for ((key, k) in stuff) {
-        if (k.first == kind && k.second < t) {
-            t = k.second
+        if (k.first == kind && (i == 1 || k.second < min)) {
+            i++
+            min = k.second
             res = key
         }
     }
@@ -256,7 +258,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  *
  * Для двух списков людей найти людей, встречающихся в обоих списках
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { it in b }
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { b.contains(it) }.toSet().toList()
 
 
 /**
@@ -269,13 +271,13 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { it
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val res = mutableSetOf<Char>()
-    word.toLowerCase()
-    for (element in word) res.add(element)
-    val t = res + chars
-    if (t.size == res.size && chars.isNotEmpty()) return true
+    val res = chars.map { it.toLowerCase() }
+    if (chars.isNotEmpty() && word != "") {
+        if (word.toLowerCase().all { it in res }) return true
+    }
     return false
 }
+
 
 /**
  * Средняя

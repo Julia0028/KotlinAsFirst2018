@@ -2,7 +2,6 @@
 
 package lesson5.task1
 
-import java.lang.Double.MAX_VALUE
 
 /**
  * Пример
@@ -272,9 +271,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { b.
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val res = chars.map { it.toLowerCase() }
-    if (chars.isNotEmpty() && word != "") {
-        if (word.toLowerCase().all { it in res }) return true
-    }
+    if (word.toLowerCase().all { it in res } || chars.isNotEmpty() && word == "" ||
+            chars.isEmpty() && word == "") return true
     return false
 }
 

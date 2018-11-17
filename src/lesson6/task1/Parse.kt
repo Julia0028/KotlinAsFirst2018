@@ -182,7 +182,7 @@ fun bestHighJump(jumps: String): Int {
             val parts = jumps.split(" ")
             if (jumps.any { it in "+" }) {
                 for (i in 0 until parts.size - 1 step 2)
-                    if (parts[i + 1] in listOf("+", "%+", "+%")) list.add(parts[i].toInt())
+                    if (parts[i + 1].any { it in "+" }) list.add(parts[i].toInt())
                 list.max()!!
             } else throw NumberFormatException("Description")
         } else throw NumberFormatException("Description")

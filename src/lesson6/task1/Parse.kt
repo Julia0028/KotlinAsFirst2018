@@ -180,9 +180,11 @@ fun bestHighJump(jumps: String): Int {
     return try {
         if (jumps.all { it in "1234567890+%- " }) {
             val parts = jumps.split(" ")
-            for (i in 0 until parts.size - 1 step 2)
-                if (parts[i + 1] in listOf("+", "%+", "+%")) list.add(parts[i].toInt())
-            list.max()!!
+            if (jumps.any { it in "+" }) {
+                for (i in 0 until parts.size - 1 step 2)
+                    if (parts[i + 1] in listOf("+", "%+", "+%")) list.add(parts[i].toInt())
+                list.max()!!
+            } else throw NumberFormatException("Description")
         } else throw NumberFormatException("Description")
     } catch (e: NumberFormatException) {
         -1

@@ -232,20 +232,15 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     val parts = str.toLowerCase().split(" ")
-    var res = 0
-    var t = 0
-    return try {
-        for (i in 0 until parts.size - 1) {
-            if (parts[i] == parts[i + 1]) {
-                res = t
-                break
-            } else t += parts[i].length + 1
-        }
-        if (res == 0) throw NumberFormatException("Description")
-        else res
-    } catch (e: NumberFormatException) {
-        -1
+    var res = -1
+    var index = 0
+    for (i in 0 until parts.size - 1) {
+        if (parts[i] == parts[i + 1]) {
+            res = index
+            break
+        } else index += parts[i].length + 1
     }
+    return res
 }
 
 /**

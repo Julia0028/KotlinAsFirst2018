@@ -150,11 +150,15 @@ fun bestLongJump(jumps: String): Int {
     val parts = jumps.split(" ")
     val list = mutableListOf<Int>()
     return try {
-        if (jumps.any { it in "1234567890" }) {
-            for (part in parts) if (part !in listOf("-", "%")) list.add(part.toInt())
+        if (jumps.all { it in "-%1234567890 " }) {
+            for (part in parts)
+                try {
+                    list.add(part.toInt())
+                } catch (e: NumberFormatException) {
+                    list.add(-1)
+                }
         } else throw NumberFormatException("Description")
-        val res = list.sorted()
-        res.last()
+        list.sorted().last()
     } catch (e: NumberFormatException) {
         -1
     }
@@ -176,7 +180,8 @@ fun bestHighJump(jumps: String): Int {
     return try {
         if (jumps.all { it in "1234567890+%- " }) {
             val parts = jumps.split(" ")
-            for (i in 0 until parts.size - 1 step 2) if (parts[i + 1] == "+") list.add(parts[i].toInt())
+            for (i in 0 until parts.size - 1 step 2)
+                if (parts[i + 1] in listOf("+", "%+", "+%")) list.add(parts[i].toInt())
             list.max()!!
         } else throw NumberFormatException("Description")
     } catch (e: NumberFormatException) {
@@ -195,7 +200,7 @@ fun bestHighJump(jumps: String): Int {
  */
 fun plusMinus(expression: String): Int {
     val list = mutableListOf<String>()
-    if (!expression.all { it in "1234567890+- " }) throw IllegalArgumentException()
+    if (!expression.all { it in "1234567890+- " } || expression.isEmpty()) throw IllegalArgumentException()
     if (expression.startsWith('+') || expression.startsWith('-')) throw IllegalArgumentException()
     val parts = expression.split(" ")
     for (i in 0 until parts.size - 1 step 2) {
@@ -225,15 +230,17 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     val parts = str.toLowerCase().split(" ")
-    var sum = 0
+    var res = 0
     var t = 0
     return try {
         for (i in 0 until parts.size - 1) {
-            if (parts[i] == parts[i + 1]) sum = t
-            else t += parts[i].length + 1
+            if (parts[i] == parts[i + 1]) {
+                res = t
+                break
+            } else t += parts[i].length + 1
         }
-        if (sum == 0) throw NumberFormatException("Description")
-        else sum
+        if (res == 0) throw NumberFormatException("Description")
+        else res
     } catch (e: NumberFormatException) {
         -1
     }
@@ -291,7 +298,8 @@ fun fromRoman(roman: String): Int {
     var sum = 0
     val map = mutableMapOf(8 to 1, 21 to 5, 23 to 10, 11 to 50, 2 to 100, 3 to 500, 12 to 1000)
     return try {
-        if (roman.all { it in "IVXLCDM" }) {
+        if (roman.any { it !in "IVXLCDM" } || roman.isEmpty()) throw NumberFormatException("Description")
+        else {
             for (i in 0 until roman.length - 1) {
                 sum += if (map[roman[i].toInt() - 'A'.toInt()]!! < map[roman[i + 1].toInt() - 'A'.toInt()]!!)
                     -map[roman[i].toInt() - 'A'.toInt()]!!
@@ -299,7 +307,7 @@ fun fromRoman(roman: String): Int {
             }
             sum += map[roman.last().toInt() - 'A'.toInt()]!!
             sum
-        } else throw NumberFormatException("Description")
+        }
     } catch (e: NumberFormatException) {
         -1
     }

@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import lesson6.task1.firstDuplicateIndex
+
 
 /**
  * Пример
@@ -193,11 +195,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
     var min = 0.0
-    var i = 1
     var res: String? = null
     for ((key, k) in stuff) {
-        if (k.first == kind && (i == 1 || k.second < min)) {
-            i++
+        if (k.first == kind && (min == 0.0 || k.second < min)) {
             min = k.second
             res = key
         }

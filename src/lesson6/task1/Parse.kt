@@ -59,7 +59,6 @@ fun main(args: Array<String>) {
     }
 }
 
-
 /**
  * Средняя
  *
@@ -74,17 +73,16 @@ fun main(args: Array<String>) {
 
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
-    val mapMonths = mapOf("января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5,
-            "июня" to 6, "июля" to 7, "августа" to 8, "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12)
-    return try {
-        if (parts.size != 3) throw NumberFormatException("Description")
-        val month = mapMonths[parts[1]] ?: throw NumberFormatException("Description")
-        val day = parts[0].toInt()
-        val year = parts[2].toInt()
-        if (day !in 1..daysInMonth(month, year)) throw NumberFormatException("Description")
-        String.format("%02d.%02d.%d", day, month, year)
-    } catch (e: NumberFormatException) {
-        ""
+    val months = listOf("января", "февраля", "марта", "апреля", "мая",
+            "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
+    return if (parts.size != 3) ""
+    else {
+        var month = -1
+        if (parts[1] in months) month = months.indexOf(parts[1]) + 1
+        val day = parts[0].toIntOrNull()
+        val year = parts[2].toIntOrNull()
+        if (month == -1 || day == null || year == null || day !in 1..daysInMonth(month, year)) ""
+        else String.format("%02d.%02d.%d", day, month, year)
     }
 }
 
@@ -100,17 +98,17 @@ fun dateStrToDigit(str: String): String {
  */
 fun dateDigitToStr(digital: String): String {
     val parts = digital.split(".")
-    val mapMonths = mapOf(1 to "января", 2 to "февраля", 3 to "марта", 4 to "апреля", 5 to "мая",
-            6 to "июня", 7 to "июля", 8 to "августа", 9 to "сентября", 10 to "октября", 11 to "ноября", 12 to "декабря")
-    return try {
-        if (parts.size != 3) throw NumberFormatException("Description")
-        val month = mapMonths[parts[1].toInt()] ?: throw NumberFormatException("Description")
-        val day = parts[0].toInt()
-        val year = parts[2].toInt()
-        if (day !in 1..daysInMonth(parts[1].toInt(), year)) throw NumberFormatException("Description")
-        String.format("%d %s %d", day, month, year)
-    } catch (e: NumberFormatException) {
-        ""
+    val months = listOf("января", "февраля", "марта", "апреля", "мая",
+            "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
+    return if (parts.size != 3) ""
+    else {
+        if (parts[1].any { it !in "0123456789" } || parts[1].toInt() !in 1..12) return ""
+        val month = months[parts[1].toInt() - 1]
+        val day = parts[0].toIntOrNull()
+        val year = parts[2].toIntOrNull()
+        if (day == null || year == null || month == "" ||
+                day !in 1..daysInMonth(parts[1].toInt(), year)) ""
+        else String.format("%d %s %d", day, month, year)
     }
 }
 
@@ -127,13 +125,11 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    return try {
-        if (phone.all { it in "+-()1234567890 " })
-            phone.filter { it in "+1234567890" }
-        else throw NumberFormatException("Description")
-    } catch (e: NumberFormatException) {
-        ""
-    }
+    //if (Regex("""(?:\+?\(?\d*\s-*\)""").matches(phone)) return phone
+    //return ""
+    return if (phone.all { it in "+-()1234567890 " }) phone.filter { it in "+1234567890" }
+    else ""
+
 }
 
 /**
@@ -149,19 +145,15 @@ fun flattenPhoneNumber(phone: String): String {
 fun bestLongJump(jumps: String): Int {
     val parts = jumps.split(" ")
     val list = mutableListOf<Int>()
-    return try {
-        if (jumps.all { it in "-%1234567890 " }) {
-            for (part in parts)
-                try {
-                    list.add(part.toInt())
-                } catch (e: NumberFormatException) {
-                    list.add(-1)
-                }
-        } else throw NumberFormatException("Description")
+    return if (jumps.all { it in "-%1234567890 " }) {
+        for (part in parts)
+            try {
+                list.add(part.toInt())
+            } catch (e: NumberFormatException) {
+                list.add(-1)
+            }
         list.sorted().last()
-    } catch (e: NumberFormatException) {
-        -1
-    }
+    } else -1
 }
 
 
@@ -177,18 +169,14 @@ fun bestLongJump(jumps: String): Int {
  */
 fun bestHighJump(jumps: String): Int {
     val list = mutableListOf<Int>()
-    return try {
-        if (jumps.all { it in "1234567890+%- " }) {
-            val parts = jumps.split(" ")
-            if (jumps.any { it in "+" }) {
-                for (i in 0 until parts.size - 1 step 2)
-                    if (parts[i + 1].any { it in "+" }) list.add(parts[i].toInt())
-                list.max()!!
-            } else throw NumberFormatException("Description")
-        } else throw NumberFormatException("Description")
-    } catch (e: NumberFormatException) {
-        -1
-    }
+    return if (jumps.all { it in "1234567890+%- " }) {
+        val parts = jumps.split(" ")
+        if (jumps.any { it in "+" }) {
+            for (i in 0 until parts.size - 1 step 2)
+                if (parts[i + 1].any { it in "+" }) list.add(parts[i].toInt())
+            list.max()!!
+        } else return -1
+    } else return -1
 }
 
 /**

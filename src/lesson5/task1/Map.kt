@@ -2,8 +2,6 @@
 
 package lesson5.task1
 
-import lesson6.task1.firstDuplicateIndex
-
 
 /**
  * Пример
@@ -337,7 +335,18 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var res = Pair(-1, -1)
+    val l = mutableListOf<Int>()
+    for (i in 0 until list.size) {
+        if (number - list[i] in list && list.indexOf(number - list[i]) != list.indexOf(list[i])) {
+            l.add(list[i])
+        }
+    }
+    if (l.size == 2) res = Pair(list.indexOf(l.first()), list.indexOf((l.last())))
+    return res
+}
+
 
 /**
  * Очень сложная

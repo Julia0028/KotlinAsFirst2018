@@ -146,7 +146,7 @@ fun bestLongJump(jumps: String): Int {
     return if (jumps.contains(Regex("""\d"""))) {
         val remake = Regex("""[-%]\s""").replace(jumps, "")
         val parts = remake.split(" ")
-        for (part in parts) list.add(part.toInt())
+        for (part in parts) if (part !in listOf(" ", "")) list.add(part.toInt())
         (list.sorted().last())
     } else -1
 }
@@ -186,9 +186,9 @@ fun plusMinus(expression: String): Int {
     var plusSum = 0
     var minusSum = 0
     if (Regex("""((([1-9]+\d+)|\d) ([+-]) )*(([1-9]+\d+)|\d)""").matches(expression)) {
-        val remakeMinus = Regex("""(\+ \d+)|-|(^\d+) """).replace(expression, "")
+        val remakeMinus = Regex("""(^\d+)|(\+ \d+)|-""").replace(expression, "")
         Regex("""\d+""").findAll(remakeMinus).forEach { minusSum += it.value.toInt() }
-        val remakePlus = Regex("""(- \d+)|(\+ )""").replace(expression, "")
+        val remakePlus = Regex("""(\+ )|(- \d+)""").replace(expression, "")
         Regex("""\d+""").findAll(remakePlus).forEach { plusSum += it.value.toInt() }
     } else throw IllegalArgumentException()
 
@@ -265,7 +265,8 @@ fun mostExpensive(description: String): String {
 fun fromRoman(roman: String): Int {
     var sum = 0
     val map = mutableMapOf(8 to 1, 21 to 5, 23 to 10, 11 to 50, 2 to 100, 3 to 500, 12 to 1000)
-    if (Regex("""M*(CM|DC{0,3}|CD|C{0,3})?(XC|LX{0,3}|XL|X{0,3})?(IX|VI{0,3}|IV|I{0,3})?""").matches(roman)) {
+    if (Regex("""M*(CM|DC{0,3}|CD|C{0,3})?(XC|LX{0,3}|XL|X{0,3})?(IX|VI{0,3}|IV|I{0,3})?""").matches(roman) &&
+            roman.isNotEmpty()) {
         for (i in 0 until roman.length - 1) {
             sum += if (map[roman[i].toInt() - 'A'.toInt()]!! < map[roman[i + 1].toInt() - 'A'.toInt()]!!)
                 -map[roman[i].toInt() - 'A'.toInt()]!!

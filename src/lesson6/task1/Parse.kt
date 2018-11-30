@@ -102,7 +102,7 @@ fun dateDigitToStr(digital: String): String {
             "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
     return if (parts.size != 3) ""
     else {
-        if (parts[1].any { it !in "0123456789" } || parts[1].toInt() !in 1..12) return ""
+        if (parts[1].any { it !in '0'..'9' } || parts[1].toInt() !in 1..12) return ""
         val month = months[parts[1].toInt() - 1]
         val day = parts[0].toIntOrNull()
         val year = parts[2].toIntOrNull()
@@ -125,11 +125,9 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    //if (Regex("""(?:\+?\(?\d*\s-*\)""").matches(phone)) return phone
-    //return ""
-    return if (phone.all { it in "+-()1234567890 " }) phone.filter { it in "+1234567890" }
-    else ""
-
+    val res = Regex("""[()\s-]""").replace(phone, "")
+    if (res.contains(Regex("""[^\d+]"""))) return ""
+    return res
 }
 
 /**
@@ -143,16 +141,13 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 fun bestLongJump(jumps: String): Int {
-    val parts = jumps.split(" ")
     val list = mutableListOf<Int>()
-    return if (jumps.all { it in "-%1234567890 " }) {
-        for (part in parts)
-            try {
-                list.add(part.toInt())
-            } catch (e: NumberFormatException) {
-                list.add(-1)
-            }
-        list.sorted().last()
+    if (jumps.contains(Regex("""[^\d\s-%]"""))) return -1
+    return if (jumps.contains(Regex("""\d"""))) {
+        val remake = Regex("""[-%]\s""").replace(jumps, "")
+        val parts = remake.split(" ")
+        for (part in parts) list.add(part.toInt())
+        (list.sorted().last())
     } else -1
 }
 
@@ -168,15 +163,14 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val list = mutableListOf<Int>()
-    return if (jumps.all { it in "1234567890+%- " }) {
-        val parts = jumps.split(" ")
-        if (jumps.any { it in "+" }) {
-            for (i in 0 until parts.size - 1 step 2)
-                if (parts[i + 1].any { it in "+" }) list.add(parts[i].toInt())
-            list.max()!!
-        } else return -1
-    } else return -1
+    return try {
+        val remake = Regex("[-%]+").replace(jumps, "")
+        val res = Regex("""\d+ \+""").findAll(remake)
+                .map { Regex("""\d+""").find(it.value)!!.value.toInt() }
+        res.max()!!
+    } catch (e: Exception) {
+        -1
+    }
 }
 
 /**
@@ -189,25 +183,17 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val list = mutableListOf<String>()
-    if (!expression.all { it in "1234567890+- " } || expression.isEmpty()) throw IllegalArgumentException()
-    if (expression.startsWith('+') || expression.startsWith('-')) throw IllegalArgumentException()
-    val parts = expression.split(" ")
-    for (i in 0 until parts.size - 1 step 2) {
-        if (parts[i] !in listOf("+", "-") && parts[i].toInt() >= 0)
-            list.add(parts[i]) else throw IllegalArgumentException()
-        if (parts[i + 1] in listOf("+", "-")) list.add(parts[i + 1]) else throw IllegalArgumentException()
-    }
-    if (parts.last().toInt() >= 0) list.add(parts.last())
-    if (list.size != parts.size) throw IllegalArgumentException()
-    var sum = list.first().toInt()
-    for (i in 1 until list.size - 1 step 2) {
-        if (list[i] == "+") sum += list[i + 1].toInt()
-        if (list[i] == "-") sum += -list[i + 1].toInt()
-    }
-    return sum
-}
+    var plusSum = 0
+    var minusSum = 0
+    if (Regex("""((([1-9]+\d+)|\d) ([+-]) )*(([1-9]+\d+)|\d)""").matches(expression)) {
+        val remakeMinus = Regex("""(\+ \d+)|-|(^\d+) """).replace(expression, "")
+        Regex("""\d+""").findAll(remakeMinus).forEach { minusSum += it.value.toInt() }
+        val remakePlus = Regex("""(- \d+)|(\+ )""").replace(expression, "")
+        Regex("""\d+""").findAll(remakePlus).forEach { plusSum += it.value.toInt() }
+    } else throw IllegalArgumentException()
 
+    return plusSum - minusSum
+}
 
 /**
  * Сложная
@@ -243,26 +229,23 @@ fun firstDuplicateIndex(str: String): Int {
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String {
-    val part = description.split("; ")
-    val map = mutableMapOf<String, Double>()
     var max = 0.0
     var res = ""
-    try {
+    return if (Regex("""(\S+ \d+(\.\d+)?(; \S+ \d+(\.\d+)?)*)""").matches(description)) {
+        val part = description.split("; ")
+        val map = mutableMapOf<String, Double>()
         for (parts in part) {
             val t = parts.split(" ")
             map[t.first()] = t.last().toDouble()
         }
-
         for ((key, value) in map) {
             if (value >= max) {
                 max = value
                 res = key
             }
         }
-        return res
-    } catch (e: NumberFormatException) {
-        return ""
-    }
+        res
+    } else return ""
 }
 
 /**
@@ -282,21 +265,18 @@ fun mostExpensive(description: String): String {
 fun fromRoman(roman: String): Int {
     var sum = 0
     val map = mutableMapOf(8 to 1, 21 to 5, 23 to 10, 11 to 50, 2 to 100, 3 to 500, 12 to 1000)
-    return try {
-        if (roman.any { it !in "IVXLCDM" } || roman.isEmpty()) throw NumberFormatException("Description")
-        else {
-            for (i in 0 until roman.length - 1) {
-                sum += if (map[roman[i].toInt() - 'A'.toInt()]!! < map[roman[i + 1].toInt() - 'A'.toInt()]!!)
-                    -map[roman[i].toInt() - 'A'.toInt()]!!
-                else map[roman[i].toInt() - 'A'.toInt()]!!
-            }
-            sum += map[roman.last().toInt() - 'A'.toInt()]!!
-            sum
+    if (Regex("""M*(CM|DC{0,3}|CD|C{0,3})?(XC|LX{0,3}|XL|X{0,3})?(IX|VI{0,3}|IV|I{0,3})?""").matches(roman)) {
+        for (i in 0 until roman.length - 1) {
+            sum += if (map[roman[i].toInt() - 'A'.toInt()]!! < map[roman[i + 1].toInt() - 'A'.toInt()]!!)
+                -map[roman[i].toInt() - 'A'.toInt()]!!
+            else map[roman[i].toInt() - 'A'.toInt()]!!
         }
-    } catch (e: NumberFormatException) {
-        -1
+        sum += map[roman.last().toInt() - 'A'.toInt()]!!
+        return sum
     }
+return -1
 }
+
 
 /**
  * Очень сложная

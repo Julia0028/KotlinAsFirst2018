@@ -144,7 +144,7 @@ fun bestLongJump(jumps: String): Int {
     val list = mutableListOf<Int>()
     if (jumps.contains(Regex("""[^\d\s-%]"""))) return -1
     return if (jumps.contains(Regex("""\d"""))) {
-        val remake = Regex("""[-%]\s""").replace(jumps, "")
+        val remake = Regex("""[-%]\s?""").replace(jumps, "")
         val parts = remake.split(" ")
         for (part in parts) if (part !in listOf(" ", "")) list.add(part.toInt())
         (list.sorted().last())
@@ -275,7 +275,7 @@ fun fromRoman(roman: String): Int {
         sum += map[roman.last().toInt() - 'A'.toInt()]!!
         return sum
     }
-return -1
+    return -1
 }
 
 

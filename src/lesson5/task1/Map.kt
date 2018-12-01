@@ -98,8 +98,8 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val res = mutableMapOf<String, String>()
     for ((key, value) in mapA) {
-        if (res[key] == null) res[key] = value
-        if (res[key] != null && mapB[key] != null && mapB[key] != value) res[key] = res[key] + ", " + mapB[key]
+        res[key] = value
+        if (mapB[key] != null && mapB[key] != value) res[key] = res[key] + ", " + mapB[key]
     }
     return mapB + res
 }
@@ -144,8 +144,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     for ((key, value) in a) {
         if (b[key] == value) i++
     }
-    if (i == a.size) return true
-    return false
+    return (i == a.size)
 }
 
 /**
@@ -163,13 +162,9 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val amount = mutableMapOf<String, Double>()
     for ((name, price) in stockPrices) {
         if (amount[name] == null) amount[name] = 0.0
-        if (map[name] == null) {
-            map[name] = price
-            amount[name] = amount[name]!! + 1.0
-        } else {
-            map[name] = map[name]!! + price
-            amount[name] = amount[name]!! + 1.0
-        }
+        if (map[name] == null) map[name] = price
+        else map[name] = map[name]!! + price
+        amount[name] = amount[name]!! + 1.0
     }
     for ((key, value) in map) map[key] = value / amount[key]!!
     return map
@@ -268,10 +263,9 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.filter { b.
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val res = chars.map { it.toLowerCase() }
-    if (word.toLowerCase().all { it in res } || chars.isNotEmpty() && word == "" ||
-            chars.isEmpty() && word == "") return true
-    return false
+    val res = chars.map { it.toLowerCase() }.toSet()
+    return (word.toLowerCase().toSet().all { it in res })
+
 }
 
 
@@ -310,10 +304,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val res = mutableMapOf<List<Char>, String>()
+    val res = mutableMapOf<Set<Char>, String>()
     for (i in 0 until words.size) {
-        if (res[words[i].toList().sorted()] == "ok") return true
-        else res[words[i].toList().sorted()] = "ok"
+        if (res[words[i].toSet()] == "ok") return true
+        else res[words[i].toSet()] = "ok"
     }
     return false
 }

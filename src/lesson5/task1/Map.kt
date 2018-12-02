@@ -228,7 +228,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     val res = (map + map1).toMutableMap()
     res.forEach {
         for (person in it.value) {
-            res[it.key] = map[person]!!.union(it.value)
+            if (res.containsKey(person)) res[it.key] = map[person]!!.union(it.value)
         }
     }
     res.forEach {

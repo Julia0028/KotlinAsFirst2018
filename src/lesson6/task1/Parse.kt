@@ -163,7 +163,8 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    if (jumps.contains(Regex("""\d+\s[%+-]+"""))) {
+    if (jumps.contains(Regex("""\d+\s\++""")) &&
+            !jumps.contains(Regex("""[^\d\s+%-]"""))) {
         val remake = Regex("[-%]+").replace(jumps, "")
         val res = Regex("""\d+ \+""").findAll(remake)
                 .map { Regex("""\d+""").find(it.value)!!.value.toInt() }

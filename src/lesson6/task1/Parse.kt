@@ -4,6 +4,7 @@ package lesson6.task1
 
 import lesson2.task2.daysInMonth
 
+
 /**
  * Пример
  *
@@ -141,7 +142,7 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     val list = mutableListOf<Int>()
-    if (jumps.contains(Regex("""[^\d\s-%]"""))) return -1
+    if (!Regex("""(\s?\d+(\s([%-]*\s)*)?)+""").matches(jumps)) return -1
     return if (jumps.contains(Regex("""\d"""))) {
         val remake = Regex("""[-%]\s?""").replace(jumps, "")
         val parts = remake.split(" ")
@@ -162,14 +163,13 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    return try {
+    if (Regex("""(\s?\d+(\s([+%-]*\s?)+)+)+""").matches(jumps)) {
         val remake = Regex("[-%]+").replace(jumps, "")
         val res = Regex("""\d+ \+""").findAll(remake)
                 .map { Regex("""\d+""").find(it.value)!!.value.toInt() }
-        res.max()!!
-    } catch (e: Exception) {
-        -1
+        return res.max()!!
     }
+    return -1
 }
 
 /**
@@ -182,16 +182,13 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    var plusSum = 0
-    var minusSum = 0
-    if (Regex("""((([1-9]+\d+)|\d) ([+-]) )*(([1-9]+\d+)|\d)""").matches(expression)) {
-        val remakeMinus = Regex("""(^\d+)|(\+ \d+)|-""").replace(expression, "")
-        Regex("""\d+""").findAll(remakeMinus).forEach { minusSum += it.value.toInt() }
-        val remakePlus = Regex("""(\+ )|(- \d+)""").replace(expression, "")
-        Regex("""\d+""").findAll(remakePlus).forEach { plusSum += it.value.toInt() }
-    } else throw IllegalArgumentException()
-
-    return plusSum - minusSum
+    if (!Regex("""((([1-9]+\d+)|\d) ([+-]) )*(([1-9]+\d+)|\d)""").matches(expression))
+        throw IllegalArgumentException()
+    else {
+        val remake = expression.replace(" ", "").split(Regex("""(?=[-+])"""))
+        val res = remake.map { it.toInt() }
+        return res.sum()
+    }
 }
 
 /**

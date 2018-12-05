@@ -217,28 +217,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    var res = friends.toMutableMap()
-    val map = friends.toMutableMap()
-    res.forEach {
-        for (person in it.value) {
-            if (person !in friends) map[person] = setOf()
-        }
-    }
-    res = map
-    res.forEach {
-        for (person in it.value) {
-            if (res.containsKey(person)) res[it.key] = map[person]!!.union(it.value)
-        }
-    }
-    res = map
-    res.forEach {
-        for (person in it.value) {
-            if (person == it.key) res[it.key] = res[it.key]!! - person
-        }
-    }
-    return res.mapValues { it.value.sorted().toSet() }
-}
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
 
 
 /**
@@ -321,10 +300,10 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
 fun hasAnagrams(words: List<String>): Boolean {
-    val res = mutableMapOf<Set<Char>, String>()
-    for (i in 0 until words.size) {
-        if (res[words[i].toSet()] == "ok") return true
-        else res[words[i].toSet()] = "ok"
+    for (i in 0 until words.size - 1) {
+        for (k in i + 1 until words.size) {
+            if (words[i].toList().sorted() == words[k].toList().sorted()) return true
+        }
     }
     return false
 }
@@ -380,4 +359,42 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+//Задача решена на основе "рюкзака", взятого из Интернета с помощью метода
+// динамического программирования, так как преподователи разрешили пользоваться подобным.
+
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val res = mutableSetOf<String>()
+    //создаю двумерный массив(вместимость рюкзака и вместившиеся предметы). Он больше treasures.size и capasity.size
+    // на 1 строчку и 1 столбец, т. к крайняя верхняя строчка capacity не имеет веса, так же,
+    // как и самый крайний столбец не имеет предметов
+    val maxCost = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
+    val weight = mutableListOf<Int>()
+    val price = mutableListOf<Int>()
+    val name = mutableListOf<String>()
+    // делю map на листы, мне удобнее так рассматривать его элементы
+    treasures.forEach {
+        weight.add(it.value.first)
+        price.add(it.value.second)
+        name.add(it.key)
+    }
+    for (i in 0 until capacity + 1) maxCost[0][i] = 0
+    for (i in 0 until treasures.size + 1) maxCost[0][i] = 0
+    for (k in 1 until treasures.size + 1) {
+        //опять же, прохожу с 1, так как края в двумерном массиве равны 0
+        for (s in 1 until capacity + 1) {
+            if (s >= weight[k - 1])
+                maxCost[k][s] = maxOf(maxCost[k - 1][s], maxCost[k - 1][s - weight[k - 1]] + price[k - 1])
+            else maxCost[k][s] = maxCost[k - 1][s]
+        }
+    }
+    fun findAns(k: Int, s: Int) {
+        if (maxCost[k][s] == 0) return
+        if (maxCost[k - 1][s] == maxCost[k][s]) findAns(k - 1, s)
+        else {
+            findAns(k - 1, s - weight[k - 1])
+            res.add(name[k - 1])
+        }
+    }
+    findAns(treasures.size, capacity)
+    return res
+}

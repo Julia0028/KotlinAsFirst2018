@@ -143,13 +143,12 @@ fun flattenPhoneNumber(phone: String): String {
 fun bestLongJump(jumps: String): Int {
     var res = -1
     val list = mutableListOf<Int>()
-    if (!jumps.contains(Regex("""[^\d\s-%]""")) && jumps.contains(Regex("""(\s?([%-]+\s))+"""))) {
-        if (jumps.contains(Regex("""\d+"""))) {
-            val remake = Regex("""[-%]\s?""").replace(jumps, "")
-            val parts = remake.split(" ")
-            for (part in parts) if (part !in listOf(" ", "")) list.add(part.toInt())
-            res = (list.sorted().last())
-        }
+    if (!jumps.contains(Regex("""[^\d\s-%]""")) &&
+            jumps.contains(Regex("""\d+\s+([%-]+\s?)+|(\s?[%-]+)+\s+\d+"""))) {
+        val remake = Regex("""[-%]\s?""").replace(jumps, "")
+        val parts = remake.split(" ")
+        for (part in parts) if (part !in listOf(" ", "")) list.add(part.toInt())
+        res = (list.sorted().last())
     }
     return res
 }

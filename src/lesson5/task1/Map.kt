@@ -229,17 +229,23 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
         }
     }
     while (res.size != sum) {
+        sum = 0
         res.forEach {
-            sum++
-            for (person in it.value) {
-                for (people in res[person]!!) {
-                    if (!it.value.contains(people) && people != it.key) {
-                        res[it.key] = it.value + people
-                    } else continue
+            var a = setOf("")
+            if (res[it.key] != null) {
+                a = it.value
+                for (person in it.value) {
+                    for (people in res[person]!!) {
+                        if (!it.value.contains(people) && people != it.key) {
+                            res[it.key] = it.value + people
+                        } else continue
+                    }
                 }
-            }
+
+            } else sum++
+            if (a == res[it.key]) sum++
         }
-}
+    }
     return res
 }
 

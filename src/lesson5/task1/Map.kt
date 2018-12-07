@@ -218,26 +218,29 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *        )
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    var res = friends.toMutableMap()
-    val map = friends.toMutableMap()
-    res.forEach {
+    var sum = 0
+    val res = mutableMapOf<String, Set<String>>()
+    friends.forEach {
+        res[it.key] = it.value
         for (person in it.value) {
-            if (person !in friends) map[person] = setOf()
+            if (friends[person] == null) {
+                res[person] = setOf()
+            }
         }
     }
-    res = map
-    res.forEach {
-        for (person in it.value) {
-            if (res.containsKey(person)) res[it.key] = map[person]!!.union(it.value)
+    while (res.size != sum) {
+        res.forEach {
+            sum++
+            for (person in it.value) {
+                for (people in res[person]!!) {
+                    if (!it.value.contains(people) && people != it.key) {
+                        res[it.key] = it.value + people
+                    } else continue
+                }
+            }
         }
-    }
-    res = map
-    res.forEach {
-        for (person in it.value) {
-            if (person == it.key) res[it.key] = res[it.key]!! - person
-        }
-    }
-    return res.mapValues { it.value.sorted().toSet() }
+}
+    return res
 }
 
 

@@ -56,15 +56,18 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
+    val list = mutableListOf<String>()
     val file = File(inputName).bufferedReader().readLines().joinToString()
     for (i in 0 until substrings.size) res[substrings[i]] = 0
     for (str in substrings) {
+        if (str in list) continue
         var a = Regex(str.toLowerCase()).find(file.toLowerCase())
         while (a != null) {
             val indexInFile = a.range.first
             a = Regex(str.toLowerCase()).find(file.toLowerCase(), indexInFile + 1)
             res[str] = res[str]!! + 1
         }
+        list.add(str)
     }
     return res
 }
@@ -192,7 +195,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 fun top20Words(inputName: String): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
     for (line in File(inputName).readLines()) {
-        val words = (Regex("""[а-яА-Яa-zA-zё]+""")).findAll(line)
+        val words = (Regex("""[а-яА-Яa-zA-zёЁ]+""")).findAll(line)
         for (word in words) {
             if (res[word.value.toLowerCase()] == null) res[word.value.toLowerCase()] = 1
             else res[word.value.toLowerCase()] = res[word.value.toLowerCase()]!! + 1

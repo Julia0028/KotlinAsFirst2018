@@ -241,18 +241,7 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    dictionary.keys.map { it.toLowerCase() }
-    for (line in File(inputName).readLines()) {
-        if (Regex("""\n""").find(line) != null) writer.newLine()
-        for (char in line) {
-            if (dictionary[char.toLowerCase()] != null)
-                writer.write(dictionary[char.toLowerCase()])
-            else writer.write(char.toString())
-        }
-        if (Regex("""\n+""").find(line) != null) writer.newLine()
-    }
-    writer.close()
+    TODO()
 }
 
 /**
@@ -285,8 +274,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val str = StringBuilder()
     var max = 0
     var a = 0
-    loop@ for (line in File(inputName).readLines()) {
-        if (line.contains(Regex("""[^а-яА-яA-Za-zёЁ]"""))) continue@loop
+    for (line in File(inputName).readLines()) {
         for (char in line) {
             set.add(char.toLowerCase())
         }

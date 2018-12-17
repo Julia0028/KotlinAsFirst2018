@@ -241,7 +241,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
                         } else continue
                     }
                 }
-            } else sum++
+            }
             if (a == res[it.key]) sum++
         }
     }
